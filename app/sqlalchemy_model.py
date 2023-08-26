@@ -46,5 +46,6 @@ class Category(Base):
 
     category_id = Column(Integer, primary_key=True, index=True)
     category_name = Column(String)
+    description = Column(String)
     
     expenses = relationship("Expense", back_populates="category")

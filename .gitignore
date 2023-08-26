@@ -10,3 +10,8 @@ __pycache__/
 # Ignore generated configuration files
 env.txt
 app/config.py
+
+# Handle migrations
+alembic
+alembic.ini
+
