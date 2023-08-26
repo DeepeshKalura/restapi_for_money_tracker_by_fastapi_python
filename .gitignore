@@ -1,2 +1,5 @@
 # Say No to virtual environment
 .env
+
+# I like catching but you will not if it my cache isn't it?
+*__pycache__
