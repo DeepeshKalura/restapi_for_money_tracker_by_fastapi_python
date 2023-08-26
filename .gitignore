@@ -1,12 +1,12 @@
-# Say No to virtual environment
+# Ignore virtual environment folders
+__pycache__/
+
+# Ignore Visual Studio Code settings
+.vscode/
+
+# Ignore environment file
 .env
 
-# I like catching but you will not if it my cache isn't it?
-*__pycache__
-
-
-# I don't like to impose my vscode setting into you 
-.vscode
-
-# I really no like to share any secrets releated to database and authentication 
-.conf
+# Ignore generated configuration files
+env.txt
+app/config.py
