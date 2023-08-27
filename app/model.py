@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Date, Float
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Date, Float, CheckConstraint
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.sql import func
@@ -29,8 +29,9 @@ class Transaction(Base):
 
     transaction_id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey('users.user_id'))
+    transaction_amount = Column(Float, nullable=False)
     # expense_id = Column(Integer, ForeignKey('expenses.expense_id'))
-    transaction_date = Column(Date)
+    transaction_date = Column(Date, nullable=False, server_default=func.now())
 
     # user = relationship("User", back_populates="transactions")
     # expense = relationship("Expense", back_populates="transactions")
@@ -41,9 +42,11 @@ class Expense(Base):
     expense_id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey('users.user_id'))
     expense_name = Column(String)
-    amount = Column(Float)
+    # amount = Column(Float)
     category_id = Column(Integer, ForeignKey('categories.category_id'))
     transaction_id = Column(Integer, ForeignKey('transactions.transaction_id'))
+    expense_category = Column(String, CheckConstraint('expense_category IN (-1, 0, 1)', name='check_expense_category', ), nullable=False)
+    expense_description = Column(String, nullable=False)
 
     # user = relationship("User", back_populates="expenses")
     # transactions = relationship("Transaction", back_populates="expense")

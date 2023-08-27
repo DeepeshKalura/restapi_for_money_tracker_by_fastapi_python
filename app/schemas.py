@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, date
 from pydantic import BaseModel
 from typing import List, Optional
 
@@ -24,16 +24,20 @@ class UserUpdate(UserBase):
 
 class ExpenseBase(BaseModel):
     expense_name: str
-    amount: float
     category_id: int
 
-class ExpenseCreate(ExpenseBase):
-    pass
+class ExpenseCreate(BaseModel):
+    expense_name: str
+    expense_category : str
+    amount: float
+    expense_description: Optional[str] = None
 
 class Expense(ExpenseBase):
-    expense_id: int
-    latest_transaction_date: str
-    user: User
+    amount: int
+    transaction_date: date
+    category: str
+
+    
 
     class Config:
         from_attributes = True

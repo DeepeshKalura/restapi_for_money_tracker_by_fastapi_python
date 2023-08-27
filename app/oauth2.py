@@ -51,5 +51,5 @@ def get_current_user(
     if not isinstance(dummyToken, schemas.TokenData):
         raise credentials_exception
 
-    user = db.query(model.User).filter(model.User.id == dummyToken.id).first()
+    user = db.query(model.User).filter(model.User.user_id == dummyToken.id).first()
     return user
