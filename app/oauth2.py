@@ -2,7 +2,7 @@ from fastapi import Depends, HTTPException, status
 from jose import jwt, JWTError
 from datetime import datetime, timedelta
 
-from app import sqlalchemy_model as model
+from app import model as model
 from app.database import get_db
 from . import schemas
 from fastapi.security import OAuth2PasswordBearer
@@ -17,7 +17,7 @@ def create_access_token(data: dict):
     expire = datetime.utcnow() + timedelta(hours=settings.ACCESS_TOKEN_EXPIRE_HOURS)
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(
-        to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM
+        to_encode, settings.SECRECT_KEY, algorithm=settings.ALGORITHM
     )
 
     return encoded_jwt
@@ -26,7 +26,7 @@ def create_access_token(data: dict):
 def verify_token(token: str, credentials_exception):
     try:
         payload = jwt.decode(
-            token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM]
+            token, settings.SECRECT_KEY, algorithms=[settings.ALGORITHM]
         )
         id = payload.get("user_id")
         if id is None:
