@@ -6,6 +6,7 @@ __pycache__/
 
 # Ignore environment file
 .env
+.venv
 
 # Ignore generated configuration files
 env.txt
@@ -14,4 +15,5 @@ app/config.py
 # Handle migrations
 alembic
 alembic.ini
+
 
