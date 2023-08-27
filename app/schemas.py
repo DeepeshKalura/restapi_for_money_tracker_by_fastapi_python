@@ -1,5 +1,7 @@
+from datetime import datetime
 from pydantic import BaseModel
 from typing import List, Optional
+
 
 class UserBase(BaseModel):
     email: str
@@ -11,7 +13,7 @@ class UserCreate(UserBase):
 class User(UserBase):
     user_id: int
     name: str
-    date_created: str
+    date_created: datetime
 
     class Config:
         from_attributes = True
