@@ -1,6 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Response
 from sqlalchemy.orm import Session
-from .. import sqlalchemy_model as model, schemas, utils, oauth2
+
+from .. import model 
+from .. import schemas, utils, oauth2
 from ..database import get_db
 from fastapi.security import OAuth2PasswordRequestForm
 
@@ -30,7 +32,7 @@ def login(
             status_code=status.HTTP_403_FORBIDDEN, detail=f"Invalid Credentials"
         )
 
-    access_token = oauth2.create_access_token(data={"user_id": user.id})
+    access_token = oauth2.create_access_token(data={"user_id": user.user_id})
     return {
         "access_token": access_token,
         "token_type": "bearer",
