@@ -1,5 +1,5 @@
 from fastapi import HTTPException, Response, status, Depends, APIRouter
-from .. import sqlalchemy_model, schemas, utils, oauth2
+from .. import model, schemas, utils, oauth2
 from sqlalchemy.orm import Session
 from ..database import get_db
 from typing import List
@@ -14,10 +14,10 @@ router = APIRouter(
 
 
 # ! Just for the testing purpose
-@router.get("/", status_code=status.HTTP_200_OK, response_model=List[schemas.User])
-def get_all_users(db: Session = Depends(get_db)):
-    users = db.query(sqlalchemy_model.User).all()
-    return users
+# @router.get("/", status_code=status.HTTP_200_OK, response_model=List[schemas.User])
+# def get_all_users(db: Session = Depends(get_db)):
+#     users = db.query(model.User).all()
+#     return users
 
 
 
@@ -26,7 +26,7 @@ def get_all_users(db: Session = Depends(get_db)):
 @router.post("/", status_code=status.HTTP_201_CREATED, response_model=schemas.User)
 async def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
     # Has the password hashed - user.password
-    checking_user = db.query(sqlalchemy_model.User).filter(sqlalchemy_model.User.email == user.email).first()
+    checking_user = db.query(model.User).filter(model.User.email == user.email).first()
     if checking_user:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -34,7 +34,7 @@ async def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
         )
     hash = utils.hash(user.password)
     user.password = hash
-    new_user = sqlalchemy_model.User(**user.model_dump())
+    new_user = model.User(**user.model_dump())
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
@@ -43,9 +43,9 @@ async def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
 
 
 
-@router.patch("/", response_model=schemas.User)
+@router.patch("/", status_code=status.HTTP_202_ACCEPTED, response_model=schemas.User)
 def update_user(user_update: schemas.UserUpdate, db: Session = Depends(get_db)):
-    user = db.query(sqlalchemy_model.User).filter(sqlalchemy_model.User.email == user_update.email).first()
+    user = db.query(model.User).filter(model.User.email == user_update.email).first()
 
     if not user:
         raise HTTPException(
@@ -61,10 +61,10 @@ def update_user(user_update: schemas.UserUpdate, db: Session = Depends(get_db)):
 
     if user_update.password:
         hash = utils.hash(user_update.password)
-        user.password = hash
+        user.password = hash  # type: ignore
 
     if user_update.name:
-        user.name = sqlalchemy_model.Column(sqlalchemy_model.String, default=user_update.name)
+        user.name = user_update.name  # type: ignore
 
     db.commit()
     db.refresh(user)  
