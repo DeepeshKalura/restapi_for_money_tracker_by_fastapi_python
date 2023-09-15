@@ -12,7 +12,7 @@ app.include_router(auth.router)
 app.include_router(expense.router)
 
 
-
+# TODO: Dependency Injection with HTML css and js
 @app.get("/", tags=["Root"])
 async def root():
     return {"message": "Hello World"}   
